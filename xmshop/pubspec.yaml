@@ -21,4 +21,13 @@ dev_dependencies:
 
 flutter: 
   uses-material-design: true
+  assets:
+    - assest/focus_raw.json
+    - assest/home_category.json
+    - assest/images/xiaomiBanner.png
+    - assest/images/2.0x/xiaomiBanner.png
+    - assest/images/3.0x/xiaomiBanner.png
+    - assest/images/xiaomiBanner2.png
+    - assest/images/2.0x/xiaomiBanner2.png
+    - assest/images/3.0x/xiaomiBanner2.png
 
