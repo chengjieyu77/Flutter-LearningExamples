@@ -49,8 +49,8 @@ class HomeCategoryItem {
     if (json["title"] is String) {
       title = json["title"];
     }
-    if (json["url"] is String) {
-      url = json["url"];
+    if (json["pic"] is String) {
+      url = json["pic"];
     }
     if (json["pid"] is String) {
       pid = json["pid"];
@@ -73,7 +73,7 @@ class HomeCategoryItem {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["id"] = id;
     _data["title"] = title;
-    _data["url"] = url;
+    _data["pic"] = url;
     _data["pid"] = pid;
     _data["sort"] = sort;
     _data["is_best"] = isBest;

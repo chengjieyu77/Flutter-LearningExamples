@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -7,6 +9,7 @@ import '../../../service/screenAdapter.dart';
 import '../controllers/home_controller.dart';
 import '../../../service/keepAliveWrapper.dart';
 import 'package:flutter_swiper_view/flutter_swiper_view.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
@@ -15,32 +18,37 @@ class HomeView extends GetView<HomeController> {
   Widget _appbar() {
     return AppBar(
       elevation: 0,
-      title: AnimatedContainer(
-        duration: Duration(milliseconds: 700),
-        width: controller.flag.value
-            ? ScreenAdapter.width(800)
-            : ScreenAdapter.width(620),
-        height: ScreenAdapter.height(96),
-        decoration: BoxDecoration(
-            color: Color.fromARGB(175, 237, 232, 232),
-            borderRadius: BorderRadius.circular(30)),
-        child: Padding(
-          padding: EdgeInsets.fromLTRB(
-              ScreenAdapter.width(34), 2, ScreenAdapter.width(34), 2),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(Icons.search),
-              SizedBox(width: 2.0),
-              Expanded(
-                flex: 1,
-                child: Text(
-                  "ear phone",
-                  style: TextStyle(fontSize: ScreenAdapter.fontSize(48)),
+      title: InkWell(
+        onTap: () {
+          Get.toNamed('/search');
+        },
+        child: AnimatedContainer(
+          duration: Duration(milliseconds: 700),
+          width: controller.flag.value
+              ? ScreenAdapter.width(800)
+              : ScreenAdapter.width(620),
+          height: ScreenAdapter.height(96),
+          decoration: BoxDecoration(
+              color: Color.fromARGB(175, 237, 232, 232),
+              borderRadius: BorderRadius.circular(30)),
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(
+                ScreenAdapter.width(34), 2, ScreenAdapter.width(34), 2),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Icon(Icons.search),
+                SizedBox(width: 2.0),
+                Expanded(
+                  flex: 1,
+                  child: Text(
+                    "ear phone",
+                    style: TextStyle(fontSize: ScreenAdapter.fontSize(48)),
+                  ),
                 ),
-              ),
-              Icon(Icons.scanner_outlined),
-            ],
+                Icon(Icons.scanner_outlined),
+              ],
+            ),
           ),
         ),
       ),
@@ -81,12 +89,14 @@ class HomeView extends GetView<HomeController> {
             //public\upload\o0jddkfje-sjfjnag.png
             //String picUrl = "https://xiaomi.itying.com/${controller.swiperlist[index]["pic"]}"
             //picUrl.replaceAll("\\","/")
-            //String picUrl = "https://xiaomi.itying.com/${controller.swiperlist3[index].url}"
+            String picUrl =
+                "https://miapp.itying.com/${controller.swiperList3[index].pic}";
             return Image.network(
               //controller.swiperList[index]["url"],
               //controller.swiperList2[index]["url"],
-              controller.swiperList3[index].url!,
+              //controller.swiperList3[index].url!,
 
+              picUrl.replaceAll("\\", "/"),
               fit: BoxFit.cover,
             );
           },
@@ -189,6 +199,161 @@ class HomeView extends GetView<HomeController> {
     );
   }
 
+  Widget _bestSelling() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(ScreenAdapter.width(20),
+          ScreenAdapter.width(40), ScreenAdapter.width(20), 0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("热销甄选",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: ScreenAdapter.fontSize(46))),
+              Text(
+                "更多手机推荐 > ",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenAdapter.fontSize(36),
+                ),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              Expanded(
+                  flex: 1,
+                  child: Container(
+                    height: ScreenAdapter.height(738),
+                    child: Obx(
+                      () => Swiper(
+                        itemBuilder: (context, index) {
+                          String picUrl =
+                              "https://miapp.itying.com/${controller.bestSellingSwiperList[index].pic}";
+                          return Image.network(
+                            //"https://www.itying.com/images/b_focus0${index + 1}.png",
+                            picUrl.replaceAll("\\", "/"),
+                            fit: BoxFit.cover,
+                          );
+                        },
+                        itemCount: controller.bestSellingSwiperList.length,
+                        pagination: const SwiperPagination(
+                            builder: SwiperPagination.dots),
+                        autoplay: true,
+                        //loop: true,
+                      ),
+                    ),
+                  )),
+              SizedBox(
+                width: ScreenAdapter.width(20),
+              ),
+              Expanded(
+                  flex: 1,
+                  child: SizedBox(
+                    height: ScreenAdapter.height(738),
+                    child: Obx(
+                      () => Column(
+                          children: controller.plist.asMap().entries.map(
+                        //获取key
+                        (entries) {
+                          var value = entries.value;
+                          //key = entries.key
+                          var picUrl = "https://miapp.itying.com/${value.pic}";
+                          return Expanded(
+                              flex: 1,
+                              child: Padding(
+                                padding: EdgeInsets.fromLTRB(
+                                    0,
+                                    0,
+                                    0,
+                                    entries.key == 2
+                                        ? 0
+                                        : ScreenAdapter.height(20)),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                        flex: 3,
+                                        child: Column(
+                                          children: [
+                                            Text("${value.title}"),
+                                            Text("${value.subTitle}"),
+                                            Text("${value.price}")
+                                          ],
+                                        )),
+                                    Expanded(
+                                        flex: 2,
+                                        child: Padding(
+                                          padding: EdgeInsets.fromLTRB(
+                                              0, ScreenAdapter.height(8), 0, 0),
+                                          child: Image.network(
+                                            picUrl.replaceAll("\\", "/"),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ))
+                                  ],
+                                ),
+                              ));
+                        },
+                      ).toList()),
+                    ),
+                  ))
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _bestGoods() {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(ScreenAdapter.width(20),
+          ScreenAdapter.width(40), ScreenAdapter.width(20), 0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text("省心优惠",
+                  style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: ScreenAdapter.fontSize(46))),
+              Text(
+                "全部优惠 > ",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: ScreenAdapter.fontSize(36),
+                ),
+              ),
+            ],
+          ),
+          Container(
+              child: MasonryGridView.count(
+            crossAxisCount: 2,
+            mainAxisSpacing: ScreenAdapter.width(25),
+            crossAxisSpacing: ScreenAdapter.height(25),
+            itemCount: 20,
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              var height = 50 + 150 * Random().nextDouble();
+              return Container(
+                width: 20,
+                height: height,
+                child: Column(
+                  children: [],
+                ),
+                decoration: BoxDecoration(
+                    border: Border.all(width: 1, color: Colors.black)),
+              );
+            },
+          ))
+        ],
+      ),
+    );
+  }
+
   Widget _homePage() {
     return Positioned(
       top: -65,
@@ -202,6 +367,8 @@ class HomeView extends GetView<HomeController> {
           _banner(),
           _homeCategory(),
           _banner2(),
+          _bestSelling(),
+          _bestGoods(),
           const Center(
             child: Text(
               'HomeView is working',

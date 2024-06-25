@@ -20,6 +20,7 @@ void main() {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: "Application",
+          theme: ThemeData(primarySwatch: Colors.grey),
           initialRoute: AppPages.INITIAL,
           getPages: AppPages.routes,
         );

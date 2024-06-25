@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:xmshop/app/models/home_category.dart';
+import 'package:xmshop/app/models/plist.dart';
 import '../../../models/shop.dart';
 import '../../../models/focus_model.dart';
 import '../../../models/home_category.dart';
@@ -23,6 +24,7 @@ class HomeController extends GetxController {
     {"url": "https://www.itying.com/images/focus/focus02.png"},
     {"url": "https://www.itying.com/images/focus/focus01.png"}
   ];
+  RxList<FocusModelItem> bestSellingSwiperList = <FocusModelItem>[].obs;
 
   RxList swiperList2 = [].obs;
   RxList<FocusModelItem> swiperList3 = <FocusModelItem>[].obs;
@@ -30,12 +32,18 @@ class HomeController extends GetxController {
   //homeCategory
   RxList<HomeCategoryItem> homecategoryList = <HomeCategoryItem>[].obs;
 
+  RxList<PlistItem> plist = <PlistItem>[].obs;
+  RxList<PlistItem> bestPlist = <PlistItem>[].obs;
+
   @override
   void onInit() {
     super.onInit();
     addScrollListener();
     getHomeCategoryData();
     getFocusData();
+    getBestSelllingFocusData();
+    getPlistData();
+    getBestPlistData();
     //formatJson();
   }
 
@@ -57,33 +65,62 @@ class HomeController extends GetxController {
     });
   }
 
+  getBestPlistData() async {
+    final response =
+        await Dio().get("https://miapp.itying.com/api/plist?is_best=1");
+    var pList = Plist.fromJson(response.data);
+    bestPlist.value = pList.result!;
+    print(bestPlist[0].pic);
+    update();
+  }
+
+  getPlistData() async {
+    final response = await Dio()
+        .get("https://miapp.itying.com/api/plist?is_hot=1&pageSize=3");
+    var pList = Plist.fromJson(response.data);
+    plist.value = pList.result!;
+    print(plist[0].pic);
+    update();
+  }
+
   getHomeCategoryData() async {
-    //final response = await Dio().get("https://xiaomi.itying.com/api/bestCate");
-    //var  homeCategory = HomeCategory.fromJson(response.data);
-    // focus.result[0].title;
-    //homeCategoryList.value = homeCategory.result!;
-    // update();
-    final response = await rootBundle.loadString('assest/home_category.json');
-    print(response);
+    final response = await Dio().get("https://miapp.itying.com/api/bestCate");
+    var homeCategory = HomeCategory.fromJson(response.data);
+    homecategoryList.value = homeCategory.result!;
+    update();
+    // final response = await rootBundle.loadString('assest/home_category.json');
+    // print(response);
   }
 
   getFocusData() async {
-    //final response = await Dio().get("https://xiaomi.itying.com/api/focus");
+    final response = await Dio().get("https://miapp.itying.com/api/focus");
     //swiperList2.value = response.data["result"];
-    //var focus = FocusModel.fromJson(response.data);
-    // focus.result[0].title;
-    //swiperList3.value = focus.result!;
+    var focus = FocusModel.fromJson(response.data);
+
+    swiperList3.value = focus.result!;
+    print(swiperList3[0].pic);
+    update();
+
+    // final response = await rootBundle.loadString('assest/focus_raw.json');
+    // final data = await json.decode(response);
+    // //swiperList.value = data["result"];
+    // //print(data["result"]);
+    // swiperList2.value = data["result"];
+    // print(response);
+    // print(data);
+    // print(data["result"]);
+
     // update();
+  }
 
-    final response = await rootBundle.loadString('assest/focus_raw.json');
-    final data = await json.decode(response);
-    //swiperList.value = data["result"];
-    //print(data["result"]);
-    swiperList2.value = data["result"];
-    print(response);
-    print(data);
-    print(data["result"]);
+  void getBestSelllingFocusData() async {
+    final response =
+        await Dio().get("https://miapp.itying.com/api/focus?position=2");
+    //bestSellingSwiperList.value = response.data["result"];
+    var focus = FocusModel.fromJson(response.data);
 
+    bestSellingSwiperList.value = focus.result!;
+    print(bestSellingSwiperList[0].pic);
     update();
   }
 

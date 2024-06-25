@@ -25,10 +25,10 @@ class FocusModel {
 class FocusModelItem {
   String? id;
   String? title;
-  String? url;
+  String? pic;
   int? status;
 
-  FocusModelItem({this.id, this.title, this.url, this.status});
+  FocusModelItem({this.id, this.title, this.pic, this.status});
 
   FocusModelItem.fromJson(Map<String, dynamic> json) {
     if (json["id"] is String) {
@@ -37,8 +37,8 @@ class FocusModelItem {
     if (json["title"] is String) {
       title = json["title"];
     }
-    if (json["url"] is String) {
-      url = json["url"];
+    if (json["pic"] is String) {
+      pic = json["pic"];
     }
     if (json["status"] is int) {
       status = json["status"];
@@ -49,7 +49,7 @@ class FocusModelItem {
     final Map<String, dynamic> _data = <String, dynamic>{};
     _data["id"] = id;
     _data["title"] = title;
-    _data["url"] = url;
+    _data["pic"] = pic;
     _data["status"] = status;
     return _data;
   }
