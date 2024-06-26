@@ -5,7 +5,8 @@ import 'package:get/get.dart';
 import 'package:xmshop/app/service/screenAdapter.dart';
 
 import '../controllers/search_controller.dart';
-import '../../category/views/category_view.dart';
+
+import '../../../service/searchServices.dart';
 
 class SearchView extends GetView<MySearchController> {
   const SearchView({Key? key}) : super(key: key);
@@ -35,6 +36,7 @@ class SearchView extends GetView<MySearchController> {
                       controller.searchInput = value;
                     },
                     onSubmitted: (value) {
+                      SearchServices.setHistoryData(controller.searchInput);
                       Get.toNamed('/product-list',
                           arguments: {"searchInput": value});
                     },
@@ -57,6 +59,7 @@ class SearchView extends GetView<MySearchController> {
           TextButton(
             onPressed: () {
               if (controller.searchInput.isNotEmpty) {
+                SearchServices.setHistoryData(controller.searchInput);
                 Get.offAndToNamed('/product-list',
                     arguments: {'searchInput': controller.searchInput});
               }
@@ -67,16 +70,40 @@ class SearchView extends GetView<MySearchController> {
       ),
       body: ListView(
         children: [
-          Padding(
-            padding: EdgeInsets.fromLTRB(
-                ScreenAdapter.width(20),
-                ScreenAdapter.width(10),
-                ScreenAdapter.width(20),
-                ScreenAdapter.width(10)),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [Text("搜索历史"), Icon(Icons.delete)],
-            ),
+          Obx(
+            () => controller.historyList.isNotEmpty
+                ? Padding(
+                    padding: EdgeInsets.fromLTRB(
+                        ScreenAdapter.width(20),
+                        ScreenAdapter.width(10),
+                        ScreenAdapter.width(20),
+                        ScreenAdapter.width(10)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text("搜索历史"),
+                        IconButton(
+                            onPressed: () {
+                              controller.clearHistoryData();
+                            },
+                            icon: Icon(Icons.delete))
+                      ],
+                    ),
+                  )
+                : Text(""),
+          ),
+          Obx(
+            () => Wrap(
+                children: controller.historyList.map((value) {
+              return GestureDetector(
+                onLongPress: () {
+                  controller.removeSingleHistoryData(value);
+                },
+                child: Row(
+                  children: [Text("$value")],
+                ),
+              );
+            }).toList()),
           )
         ],
       ),

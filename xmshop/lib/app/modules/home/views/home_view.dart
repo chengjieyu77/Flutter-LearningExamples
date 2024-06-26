@@ -338,14 +338,20 @@ class HomeView extends GetView<HomeController> {
             physics: NeverScrollableScrollPhysics(),
             itemBuilder: (context, index) {
               var height = 50 + 150 * Random().nextDouble();
-              return Container(
-                width: 20,
-                height: height,
-                child: Column(
-                  children: [],
+              return InkWell(
+                onTap: () {
+                  Get.toNamed('/product-content',
+                      arguments: {"id": controller.bestPlist[index].cid});
+                },
+                child: Container(
+                  width: 20,
+                  height: height,
+                  child: Column(
+                    children: [],
+                  ),
+                  decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: Colors.black)),
                 ),
-                decoration: BoxDecoration(
-                    border: Border.all(width: 1, color: Colors.black)),
               );
             },
           ))

@@ -14,6 +14,7 @@ dependencies:
   flutter_swiper_view: ^1.1.8
   dio: ^5.4.3+1
   flutter_staggered_grid_view: ^0.7.0
+  shared_preferences: ^2.2.3
 
 dev_dependencies: 
   flutter_lints: ^3.0.0
@@ -23,12 +24,14 @@ dev_dependencies:
 flutter: 
   uses-material-design: true
   assets:
-    # - assest/focus_raw.json
-    # - assest/home_category.json
     - assest/images/xiaomiBanner.png
     - assest/images/2.0x/xiaomiBanner.png
     - assest/images/3.0x/xiaomiBanner.png
     - assest/images/xiaomiBanner2.png
     - assest/images/2.0x/xiaomiBanner2.png
     - assest/images/3.0x/xiaomiBanner2.png
+    - assest/images/xiaomi.png
+    - assest/images/2.0x/xiaomi.png
+    - assest/images/3.0x/xiaomi.png
+    - assest/xiaomi.png
 

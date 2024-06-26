@@ -28,7 +28,6 @@ class ProductListController extends GetxController {
   String? cid = Get.arguments['cid'];
   String apiUri = "";
 
-  final count = 0.obs;
   @override
   void onInit() {
     super.onInit();
@@ -38,8 +37,6 @@ class ProductListController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
-  void increment() => count.value++;
 
   void initScrolController() {
     scrollController.addListener(() {
