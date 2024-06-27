@@ -20,12 +20,18 @@ class ProductContentController extends GetxController {
 
   double gk2Position = 0;
   double gk3Position = 0;
+
   RxBool isSubHeaderShown = false.obs;
   List subTabList = [
     {"id": 1, "title": "商品介绍"},
     {"id": 2, "title": "规格参数"},
   ];
   RxInt selectedSubTabId = 1.obs;
+
+  //保存筛选属性值
+  RxString selectedAttr = "".obs;
+
+  RxInt buyNumber = 0.obs;
 
   @override
   void onInit() {
@@ -38,12 +44,7 @@ class ProductContentController extends GetxController {
     super.onClose();
   }
 
-  void onSubTabIdChange(int id) {
-    selectedSubTabId.value = id;
-    update();
-  }
-
-  getContainerPosition(pixels) {
+  void getContainerPosition(pixels) {
     RenderBox box2 = gk2.currentContext!.findRenderObject() as RenderBox;
     double gk2Position = box2.localToGlobal(Offset.zero).dy +
         pixels -
@@ -68,11 +69,22 @@ class ProductContentController extends GetxController {
       if (scrollController.position.pixels > gk2Position &&
           scrollController.position.pixels < gk3Position) {
         if (isSubHeaderShown.value == false) {
+          selectedTabIndex.value == 2;
           isSubHeaderShown.value == true;
+          update();
         }
-      } else {
+      } else if (scrollController.position.pixels > 0 &&
+          scrollController.position.pixels < gk2Position) {
         if (isSubHeaderShown.value == true) {
+          selectedTabIndex.value == 1;
           isSubHeaderShown.value == false;
+          update();
+        }
+      } else if (scrollController.position.pixels > gk2Position) {
+        if (isSubHeaderShown.value == true) {
+          selectedTabIndex.value == 3;
+          isSubHeaderShown.value == false;
+          update();
         }
       }
 
@@ -97,6 +109,25 @@ class ProductContentController extends GetxController {
 
   void changeSelectedIndex(int id) {
     selectedTabIndex.value = id;
+
     update();
+  }
+
+  void onSubTabIdChange(int id) {
+    selectedSubTabId.value = id;
+    scrollController.jumpTo(gk2Position);
+    update();
+  }
+
+  increaseBuyNumber() {
+    buyNumber.value++;
+    update();
+  }
+
+  minusBuyNumber() {
+    if (buyNumber.value > 1) {
+      buyNumber.value--;
+      update();
+    }
   }
 }

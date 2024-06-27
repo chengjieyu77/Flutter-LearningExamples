@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -7,9 +9,94 @@ import '../controllers/product_content_controller.dart';
 import './first_page_view.dart';
 import 'second_page_view.dart';
 import 'third_page_view.dart';
+import 'cart_item_number_view.dart';
 
 class ProductContentView extends GetView<ProductContentController> {
   const ProductContentView({Key? key}) : super(key: key);
+
+//action 1筛选属性 2加入购物车 3立即购买
+  void showBottomAttr(int action) {
+    Get.bottomSheet(GetBuilder<ProductContentController>(
+        init: controller,
+        builder: (controller) {
+          return Container(
+            color: Colors.white,
+            padding: EdgeInsets.all(ScreenAdapter.width(20)),
+            width: double.infinity,
+            height: ScreenAdapter.height(1200),
+            child: Stack(children: [
+              ListView(
+                children: [CartItemNumberView()],
+              ),
+              Positioned(
+                  //left: ScreenAdapter.width(1000),
+                  right: ScreenAdapter.width(0),
+                  top: 0,
+                  child: IconButton(
+                      onPressed: () {
+                        Get.back();
+                      },
+                      icon: Icon(Icons.close))),
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: action == 1
+                    ? Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              height: ScreenAdapter.height(120),
+                              margin: EdgeInsets.only(
+                                  right: ScreenAdapter.width(20)),
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStateProperty.all(Colors.amber),
+                                    shape: WidgetStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)))),
+                                child: Text("加入购物车"),
+                              ),
+                            ),
+                          ),
+                          Expanded(
+                            flex: 1,
+                            child: Container(
+                              height: ScreenAdapter.height(120),
+                              margin: EdgeInsets.only(
+                                  right: ScreenAdapter.width(20)),
+                              child: ElevatedButton(
+                                onPressed: () {},
+                                style: ButtonStyle(
+                                    backgroundColor:
+                                        WidgetStateProperty.all(Colors.red),
+                                    shape: WidgetStateProperty.all(
+                                        RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(20)))),
+                                child: Text("立即购买"),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    : ElevatedButton(
+                        onPressed: () {
+                          Get.back();
+                          if (action == 2) {
+                          } else {}
+                        },
+                        child: Text("确定"),
+                      ),
+              )
+            ]),
+          );
+        }));
+  }
 
   Widget _appbar(context) {
     return Obx(
@@ -51,10 +138,24 @@ class ProductContentView extends GetView<ProductContentController> {
                             Scrollable.ensureVisible(
                                 controller.gk2.currentContext as BuildContext,
                                 duration: Duration(milliseconds: 100));
+                            Timer.periodic(Duration(milliseconds: 101),
+                                (timer) {
+                              controller.scrollController.jumpTo(
+                                  controller.scrollController.position.pixels -
+                                      ScreenAdapter.height(120));
+                              timer.cancel();
+                            });
                           } else {
                             Scrollable.ensureVisible(
                                 controller.gk3.currentContext as BuildContext,
                                 duration: Duration(milliseconds: 100));
+                            Timer.periodic(Duration(milliseconds: 101),
+                                (timer) {
+                              controller.scrollController.jumpTo(
+                                  controller.scrollController.position.pixels -
+                                      ScreenAdapter.height(120));
+                              timer.cancel();
+                            });
                           }
                         },
                         child: Column(children: [
@@ -187,8 +288,13 @@ class ProductContentView extends GetView<ProductContentController> {
                 alignment: Alignment.center,
                 width: ScreenAdapter.width(200),
                 height: ScreenAdapter.height(160),
-                child: Column(
-                  children: [Icon(Icons.shopping_cart), Text("购物车")],
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed('/cart');
+                  },
+                  child: Column(
+                    children: [Icon(Icons.shopping_cart), Text("购物车")],
+                  ),
                 ),
               ),
               Expanded(
@@ -197,7 +303,9 @@ class ProductContentView extends GetView<ProductContentController> {
                   height: ScreenAdapter.height(120),
                   margin: EdgeInsets.only(right: ScreenAdapter.width(20)),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      showBottomAttr(1);
+                    },
                     style: ButtonStyle(
                         backgroundColor: WidgetStateProperty.all(Colors.amber),
                         shape: WidgetStateProperty.all(RoundedRectangleBorder(
@@ -217,7 +325,7 @@ class ProductContentView extends GetView<ProductContentController> {
                         backgroundColor: WidgetStateProperty.all(Colors.red),
                         shape: WidgetStateProperty.all(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20)))),
-                    child: Text("加入购物车"),
+                    child: Text("立即购买"),
                   ),
                 ),
               ),
