@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../controllers/code_login_step_two_controller.dart';
 
 import 'package:pin_code_fields/pin_code_fields.dart';
+import '../../../../widgets/passButton.dart';
 
 class CodeLoginStepTwoView extends GetView<CodeLoginStepTwoController> {
   const CodeLoginStepTwoView({Key? key}) : super(key: key);
@@ -16,8 +17,8 @@ class CodeLoginStepTwoView extends GetView<CodeLoginStepTwoController> {
         title: const Text('CodeLoginStepTwoView'),
         centerTitle: true,
       ),
-      body: Center(
-          child: Container(
+      body: ListView(
+          children: [Container(
         child: PinCodeTextField(
           autoFocus: true,
           keyboardType: TextInputType.number,
@@ -30,6 +31,7 @@ class CodeLoginStepTwoView extends GetView<CodeLoginStepTwoController> {
             borderRadius: BorderRadius.circular(5),
             fieldHeight: 50,
             fieldWidth: 40,
+            
             activeFillColor: Colors.white,
           ),
           animationDuration: Duration(milliseconds: 300),
@@ -53,7 +55,8 @@ class CodeLoginStepTwoView extends GetView<CodeLoginStepTwoController> {
             return true;
           },
         ),
-      )),
+      ),
+      Passbutton(onPressed: (){}, text: "verify code")]),
     );
   }
 }

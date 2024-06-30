@@ -19,6 +19,15 @@ class Httpsclient {
     }
   }
 
+  Future post(String apiUrl,{Map? data}) async{
+    try {
+      var response = await dio.post(apiUrl,data:data);
+      return response;
+    } catch (e) {
+      print(e);
+    }
+  }
+
   static replaceUri(picUri) {
     String tempUrl = domain + picUri;
     return tempUrl.replaceAll("\\", "/");

@@ -9,16 +9,10 @@ class PassLoginView extends GetView<PassLoginController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('PassLoginView'),
-        centerTitle: true,
-      ),
-      body: const Center(
-        child: Text(
-          'PassLoginView is working',
-          style: TextStyle(fontSize: 20),
+        appBar: AppBar(
+          title: const Text('PassLoginView'),
+          centerTitle: true,
         ),
-      ),
-    );
+        body: Text(""));
   }
 }

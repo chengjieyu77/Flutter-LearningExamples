@@ -9,7 +9,8 @@ import '../../user/views/user_view.dart';
 class TabsController extends GetxController {
   RxInt currentIndex = 0.obs;
   //var currentPage = HomeView().obs; page不是响应式变量
-  PageController pageController = PageController(initialPage: 0);
+ 
+  PageController pageController = Get.arguments!=null?PageController(initialPage: Get.arguments):PageController(initialPage: 0);
 
   final List<Widget> pages = [
     HomeView(),
@@ -22,6 +23,9 @@ class TabsController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
+    if(Get.arguments!=null){
+      currentIndex.value=Get.arguments["initialPage"];
+    }
     super.onInit();
   }
 
