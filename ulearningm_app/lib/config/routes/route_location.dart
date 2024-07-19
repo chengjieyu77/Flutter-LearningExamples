@@ -5,4 +5,6 @@ class RouteLocation {
   static String get welcome => '/welcome';
   static String get login => '/login';
   static String get signup => '/signup';
+  static String get home => '/home';
+  //static String get home => '/home';
 }

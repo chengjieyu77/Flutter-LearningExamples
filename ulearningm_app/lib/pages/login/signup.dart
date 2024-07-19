@@ -1,19 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:ulearningm_app/pages/login/notifier/register_notifier.dart';
+import 'package:ulearningm_app/pages/login/sign_up_controller.dart';
 
 import '../../utils/app_colors.dart';
 import '../../widgets/app_button.dart';
 import '../../widgets/form_textfield.dart';
 
-class SignUp extends StatefulWidget {
+class SignUp extends ConsumerStatefulWidget {
   const SignUp({super.key});
 
   @override
-  State<SignUp> createState() => _SignUpState();
+  ConsumerState<SignUp> createState() => _SignUpState();
 }
 
-class _SignUpState extends State<SignUp> {
+class _SignUpState extends ConsumerState<SignUp> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -30,6 +33,8 @@ class _SignUpState extends State<SignUp> {
 
   @override
   Widget build(BuildContext context) {
+    final regProvider = ref.watch(registerNotifierProvider);
+
     return Scaffold(
       appBar: AppBar(
           title: Text('Signup'),
@@ -66,9 +71,12 @@ class _SignUpState extends State<SignUp> {
                       hintText: 'Enter your user name',
                       textInputType: TextInputType.text,
                       onChanged: (value) {
-                        print(value);
+                        ref
+                            .read(registerNotifierProvider.notifier)
+                            .onUserNameChange(value);
                       },
                       controller: usernameController,
+                      textInputAction: TextInputAction.next,
                     ),
                     SizedBox(
                       height: 20.h,
@@ -79,9 +87,12 @@ class _SignUpState extends State<SignUp> {
                       hintText: 'Enter your email address',
                       textInputType: TextInputType.emailAddress,
                       onChanged: (value) {
-                        print(value);
+                        ref
+                            .read(registerNotifierProvider.notifier)
+                            .onEmailChange(value);
                       },
                       controller: emailController,
+                      textInputAction: TextInputAction.next,
                     ),
                     SizedBox(
                       height: 20.h,
@@ -92,8 +103,13 @@ class _SignUpState extends State<SignUp> {
                       hintText: 'Enter your Password',
                       textInputType: TextInputType.visiblePassword,
                       isPassword: true,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        ref
+                            .read(registerNotifierProvider.notifier)
+                            .onPasswordChange(value);
+                      },
                       controller: passwordController,
+                      textInputAction: TextInputAction.next,
                     ),
                     SizedBox(
                       height: 20.h,
@@ -104,8 +120,13 @@ class _SignUpState extends State<SignUp> {
                       hintText: 'Confirm your Password',
                       textInputType: TextInputType.visiblePassword,
                       isPassword: true,
-                      onChanged: (value) {},
+                      onChanged: (value) {
+                        ref
+                            .read(registerNotifierProvider.notifier)
+                            .onRePasswordChange(value);
+                      },
                       controller: passwordConfirmController,
+                      textInputAction: TextInputAction.done,
                     ),
                   ],
                 )),
@@ -129,6 +150,7 @@ class _SignUpState extends State<SignUp> {
                   text: 'Sign Up',
                   onPressed: () {
                     _onSignupPressed();
+                    SignUpController(ref: ref).handleSignUp();
                   },
                   backgroundColor: Colors.blueAccent,
                   textColor: Colors.white,

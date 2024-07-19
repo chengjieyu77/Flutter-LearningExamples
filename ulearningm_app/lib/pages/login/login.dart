@@ -1,11 +1,13 @@
 import 'package:email_validator/email_validator.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ulearningm_app/config/routes/route_location.dart';
-import 'package:ulearningm_app/pages/login/login_tab_view.dart';
-import 'package:ulearningm_app/pages/login/sign_up_tab_view.dart';
+import 'package:ulearningm_app/pages/login/login_controller.dart';
+import 'package:ulearningm_app/data/models/user.dart';
+import 'package:ulearningm_app/pages/login/notifier/login_notifier.dart';
 import 'package:ulearningm_app/widgets/app_button.dart';
 import 'package:ulearningm_app/widgets/email_password_login.dart';
 import 'package:ulearningm_app/widgets/third_party_login.dart';
@@ -14,24 +16,49 @@ import '../../utils/app_alerts.dart';
 import '../../utils/app_colors.dart';
 import '../../widgets/login_icon.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginState extends State<Login> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  late final PointerDownEventListener? onPointerDown;
+  late FocusNode emailFocusNode;
+  late LoginController _loginController;
+
+  @override
   void dispose() {
     _emailController.dispose();
     _passwordController.dispose();
+    emailFocusNode.dispose();
     super.dispose();
   }
 
   @override
+  void initState() {
+    super.initState();
+    //because ref is late init, it may be null
+    // Future.delayed(Duration(seconds: 0),(){
+    //   _loginController = LoginController(ref: ref);
+    // });
+
+    emailFocusNode = FocusNode();
+  }
+
+  @override
+  void didChangeDependencies() {
+    _loginController = LoginController();
+    super.didChangeDependencies();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final loginProvider = ref.watch(loginNotifierProvider);
+    print(loginProvider.email);
     return Scaffold(
       appBar: AppBar(
           title: Text('Log in'),
@@ -60,6 +87,18 @@ class _LoginState extends State<Login> {
             EmailPasswordLogin(
               emailController: _emailController,
               passwordController: _passwordController,
+              onTapOutside: (onPointerDown) {
+                //emailFocusNode.unfocus();
+              },
+              myFocusNode: emailFocusNode,
+              onEmailChange: (value) {
+                ref.read(loginNotifierProvider.notifier).onEmailChange(value);
+              },
+              onPasswordChange: (value) {
+                ref
+                    .read(loginNotifierProvider.notifier)
+                    .onPasswordChange(value);
+              },
             ),
             Container(
               margin: EdgeInsets.only(left: 25, top: 16),
@@ -77,7 +116,8 @@ class _LoginState extends State<Login> {
                 child: AppButton(
                   text: 'Log in',
                   onPressed: () {
-                    _onLoginPressed();
+                    //_onLoginPressed();
+                    _loginController.handleLogin(ref, context);
                   },
                   backgroundColor: Colors.blueAccent,
                   textColor: Colors.white,
@@ -114,6 +154,7 @@ class _LoginState extends State<Login> {
   }
 
   void _onLoginPressed() {
+    var loginState = ref.watch(loginNotifierProvider);
     final email = _emailController.text.trim();
     final password = _passwordController.text.trim();
     bool isEmailValid = _validateEmail(email);
@@ -131,6 +172,10 @@ class _LoginState extends State<Login> {
     }
 
     if (isPasswordValid && isEmailValid) {
+      loginState.copyWith(email: email, password: password);
+
+      print(loginState.email);
+
       AppAlerts.displaySnackBar(context, "submitted successfully!");
     }
   }

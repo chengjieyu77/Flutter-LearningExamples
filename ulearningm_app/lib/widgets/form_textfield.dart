@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/app_colors.dart';
+import 'app_shadow.dart';
 
 class FormTextfield extends StatelessWidget {
   const FormTextfield(
@@ -12,7 +13,10 @@ class FormTextfield extends StatelessWidget {
       this.textInputType,
       this.isPassword = false,
       this.onChanged,
-      required this.controller});
+      required this.controller,
+      this.onTapOutside,
+      this.myFocusNode,
+      required this.textInputAction});
   final String label;
   final String? hintText;
   final IconData icon;
@@ -20,6 +24,9 @@ class FormTextfield extends StatelessWidget {
   final bool isPassword;
   final void Function(String)? onChanged;
   final TextEditingController controller;
+  final Function(PointerDownEvent)? onTapOutside;
+  final FocusNode? myFocusNode;
+  final TextInputAction textInputAction;
 
   @override
   Widget build(BuildContext context) {
@@ -47,19 +54,12 @@ class FormTextfield extends StatelessWidget {
                 autofocus: false,
                 obscureText: isPassword,
                 controller: controller,
+                onTapOutside: onTapOutside,
+                focusNode: myFocusNode,
+                textInputAction: textInputAction,
               ),
             )),
       ],
     );
   }
-}
-
-BoxDecoration appBoxDecorationTextField(
-    {Color color = Colors.white54,
-    double radius = 15,
-    Color borderColor = Colors.black26}) {
-  return BoxDecoration(
-      color: color,
-      borderRadius: BorderRadius.circular(radius),
-      border: Border.all(color: borderColor));
 }

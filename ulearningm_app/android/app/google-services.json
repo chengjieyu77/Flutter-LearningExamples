@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "998953051682",
+    "project_id": "flutter-riverpod-c8c54",
+    "storage_bucket": "flutter-riverpod-c8c54.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:998953051682:android:d180be02d21cf51682cc7b",
+        "android_client_info": {
+          "package_name": "com.example.ulearningm_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQEmtFqtA_nL2sk_EO3x0bLZ_89JNlzwQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

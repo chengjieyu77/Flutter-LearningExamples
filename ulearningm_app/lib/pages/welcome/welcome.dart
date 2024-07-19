@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ulearningm_app/config/routes/route_location.dart';
+import 'package:ulearningm_app/pages/welcome/welcome_controller.dart';
 import 'package:ulearningm_app/providers/welcome_index_provider.dart';
+import 'package:ulearningm_app/utils/app_constants.dart';
 import 'package:ulearningm_app/utils/bar_height.dart';
 import 'package:ulearningm_app/utils/welcome_resource.dart';
 import 'package:ulearningm_app/widgets/app_button.dart';
 import 'package:ulearningm_app/widgets/app_onboarding_page.dart';
 import 'package:ulearningm_app/widgets/welcome_subtitle.dart';
 import 'package:ulearningm_app/widgets/welcome_title.dart';
+
+import '../../global.dart';
 
 class Welcome extends ConsumerWidget {
   const Welcome({super.key});
@@ -57,8 +61,7 @@ class Welcome extends ConsumerWidget {
                 text: pageIndex == 2 ? 'Get Started' : 'Next',
                 onPressed: pageIndex == 2
                     ? () {
-                        //context.go(RouteLocation.login);
-                        context.push(RouteLocation.login);
+                        WelcomeController.routeToLoginOrHome(context);
                       }
                     : () {
                         pageController.animateToPage(pageIndex + 1,
@@ -73,7 +76,7 @@ class Welcome extends ConsumerWidget {
             child: TextButton(
               child: Text('Skip'),
               onPressed: () {
-                context.push(RouteLocation.login);
+                WelcomeController.routeToLoginOrHome(context);
               },
             ),
           )
