@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:ulearningm_app/config/routes/routes_provider.dart';
+import 'package:ulearningm_app/services/http_util.dart';
 
 import 'global.dart';
 
 void main() async {
   await Global.init();
+  HttpUtil();
   runApp(const ProviderScope(child: MyApp()));
 }
 

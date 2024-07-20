@@ -9,6 +9,7 @@ import 'package:ulearningm_app/config/routes/route_location.dart';
 import 'package:ulearningm_app/data/models/user.dart';
 import 'package:ulearningm_app/pages/login/notifier/login_state.dart';
 import 'package:ulearningm_app/pages/login/repo/login_repo.dart';
+import 'package:ulearningm_app/services/http_util.dart';
 import 'package:ulearningm_app/utils/app_alerts.dart';
 import 'package:ulearningm_app/utils/app_constants.dart';
 
@@ -84,7 +85,7 @@ class LoginController {
       BuildContext context) {
     ref.read(apploaderProvider.notifier).state = false;
     //when successfully login, send information to server
-
+    HttpUtil().post("api/login");
     //have local storage to store user info
     try {
       //var context = ref.context;

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ulearningm_app/data/models/user.dart';
 import 'package:ulearningm_app/utils/app_constants.dart';
@@ -17,6 +18,10 @@ class StorageService {
 
   getString(String key) {
     return _pref.getString(key) ?? "the string of key is empty";
+  }
+
+  String getUserToken(){
+    return _pref.getString(AppConstants.STORAGE_USER_TOKEN_KEY)??"";
   }
 
   Future<bool> setBoll(String key, bool value) async {
@@ -40,4 +45,6 @@ class StorageService {
     var userProfile = UserProfile.fromJson(jsonProfile);
     return userProfile;
   }
+
+
 }

@@ -45,6 +45,7 @@ dependencies:
   cloud_firestore: ^5.1.0
   firebase_core:
   shared_preferences: ^2.2.3
+  dio: ^5.5.0+1
 
 
 dev_dependencies:
